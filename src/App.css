@@ -1,0 +1,99 @@
+.login-wrapper {
+  display: flex;
+}
+
+.login-left-wrapper, .login-right-wrapper {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  width: 50%;
+}
+
+.background {
+  height: 100%;
+  width: 100%;
+}
+
+.logo {
+  height: 15%;
+  left: 37.5%;
+  position: absolute;
+  top: calc(50% - 66.5px);
+  width: 25%;
+}
+
+.gradient {
+  background-color: #C3ADF6;
+  border-radius: 50%;
+  filter: blur(80px);
+  height: 150%;
+  left: 7%;
+  position: absolute;
+  top: -25%;
+  width: 350%;
+  z-index: -1;
+}
+
+.login-right-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-right-inner-wrapper {
+  height: 55%;
+  margin-left: 5%;
+}
+
+.login-h1 {
+  font-family: Roboto700;
+  font-size: 61px;
+  line-height: 73.2px;
+}
+
+.login-p {
+  font-family: Roboto400;
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: 15px;
+}
+
+.login-a {
+  color: #267dd7;
+}
+
+.login-btns-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 182px;
+  justify-content: space-between;
+  margin-top: 61px;
+}
+
+
+.login-btn {
+  align-items: center;
+  background: radial-gradient(100% 249.45% at 0% 2.78%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+  backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 23px;
+  display: flex;
+  height: 83px;
+  padding-left: 73px;
+  width: 263px;
+}
+
+.login-btn:hover {
+  cursor: pointer;
+}
+
+.login-btn:active {
+  opacity: 0.5;
+}
+
+.login-btn-text {
+  font-family: Roboto700;
+  font-size: 15px;
+  line-height: 18px;
+  margin-left: 36px;
+}

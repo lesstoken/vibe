@@ -1,16 +1,26 @@
+import React from 'react'
 import './App.css'
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Login from "./components/Login";
 import Timeline from "./components/Timeline";
+import { Web3ReactProvider } from '@web3-react/core'
+import { ethers } from 'ethers'
+
 
 function App() {
+	function getLibrary(provider, connector) {
+		return new ethers.providers.Web3Provider(provider)
+	}
+
 	return (
-		<div>
-			<Routes>
-				<Route path="/login" element={<Login />} />
-				<Route path="/" element={<Timeline />} />
-			</Routes>
-		</div>
+		<Web3ReactProvider getLibrary={getLibrary}>
+			<Router basename="/">
+				<Routes>
+					<Route path="/" element={<Login />} />
+					<Route path="/timeline" element={<Timeline />} />
+				</Routes>
+			</Router>
+		</Web3ReactProvider>
 	)
 }
 

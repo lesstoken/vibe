@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from "react-router-dom";
 import './assets/fonts/Roboto400.ttf'
 import './assets/fonts/Roboto500.ttf'
 import './assets/fonts/Roboto700.ttf'
@@ -11,9 +10,7 @@ import './assets/fonts/Roboto700.ttf'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <App />
     </React.StrictMode>
 );
 

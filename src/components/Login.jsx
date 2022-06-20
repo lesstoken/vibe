@@ -12,10 +12,11 @@ function Login() {
     const navigate = useNavigate()
     const wallet = useWeb3React();
     // connector, library, chainId, account, activate, deactivate, active, error
-    const { activate, active } = wallet;
+    const { activate, active, account } = wallet;
+    console.log('account: ' + account )
 
     useEffect(() => {
-        if (active) navigate('/timeline')
+        if (active) navigate('/')
     }, [active, navigate])
 
     return (

@@ -16,8 +16,8 @@ function App() {
 		<Web3ReactProvider getLibrary={getLibrary}>
 			<Router basename="/">
 				<Routes>
-					<Route path="/" element={<Login />} />
-					<Route path="/timeline" element={<Timeline />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/" element={<Timeline />} />
 				</Routes>
 			</Router>
 		</Web3ReactProvider>

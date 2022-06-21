@@ -1,15 +1,32 @@
-import React, {useState} from 'react'
+import React, { useCallback, useEffect, useState} from 'react'
 import {useWeb3React} from '@web3-react/core'
 import { ethers, BigNumber } from 'ethers'
-// import ropstenABI from '../abis/ropstenABI.json'
-import rinkebyABI from '../abis/rinkebyABI.json'
-import {useEffect} from 'react';
+import { ropstenABI, rinkebyABI } from '../utils/abis.js'
 import blueLogo from '../assets/images/logo-blue.svg'
+import PostCard from './PostCard';
+import { getTimeSince, preparePostData } from '../utils/utils';
 
 function Timeline() {
     const { library, chainId } = useWeb3React();
     const [isNetworkUnsupported, setIsNetworkUnsupported] = useState(true)
     const [posts, setPosts] = useState([])
+    const fetchPosts = useCallback(async () => {
+        try {
+            let provider = library || new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/ff087ba9578e4e0995028c853425a591')
+            const contract = new ethers.Contract('0x9120b19e921fAf41d315B528dE711f99cf530725', rinkebyABI, provider)
+            const latestPostID =  await contract.getLatestPostID()
+            const num = latestPostID.sub(4)
+            const posts = await contract.fetchPostsRanged(num, 5)
+            let preparedPosts = await Promise.all( posts.map( async post => {
+                //This will throw an error if the value is greater than or equal to Number.MAX_SAFE_INTEGER or less than or equal to Number.MIN_SAFE_INTEGER.
+                let postDateTimestamp = post.timestamp.toNumber()
+                return await preparePostData(post, provider, postDateTimestamp, getTimeSince)
+            }))
+            return preparedPosts
+        } catch(err) {
+            console.log(err)
+        }
+    }, [library])
     
     useEffect(() => {
         if (chainId === 3 || chainId === 4 || chainId === undefined) setIsNetworkUnsupported(false)
@@ -17,17 +34,8 @@ function Timeline() {
 
     useEffect(() => {
         if (isNetworkUnsupported) return
-        async function fetchPosts() {
-            let provider = library || new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/ff087ba9578e4e0995028c853425a591')
-            const contract = new ethers.Contract('0x9120b19e921fAf41d315B528dE711f99cf530725', rinkebyABI, provider)
-            const latestPostID =  await contract.getLatestPostID()
-            const num = latestPostID.sub(4)
-            const posts = await contract.fetchPostsRanged(num, 5)
-            setPosts(posts)
-            console.log(posts)
-        }
-        fetchPosts()
-    }, [library, isNetworkUnsupported])
+        fetchPosts().then(res => setPosts(res))
+    }, [ isNetworkUnsupported, fetchPosts])
 
     return (
         <div className="timeline-wrapper">
@@ -39,7 +47,7 @@ function Timeline() {
                     </div>
                 </aside>
                 {
-                    isNetworkUnsupported && 
+                    isNetworkUnsupported ? 
                     <div className="network-wrapper">
                         <div className="network-inner-wrapper">
                             <h1 className="network-title">This app supports ETH. You are currently connected to an unsupported network.</h1>
@@ -47,6 +55,13 @@ function Timeline() {
                             <h2 className="network-subtitle">You may need to manually switch network via your wallet.</h2>
                         </div>
                     </div>
+                    :
+                    <main className="main-wrapper">
+                        <div className="main-inner-wrapper">
+                            <div className="placeholder-search" style={{border: '2px solid black', height: '200px'}}></div>
+                            {posts.length && posts.map(post => <PostCard post={post} />)}
+                        </div>
+                    </main>
                 }
                 <aside className="timeline-right">
                     <div className="timeline-right-inner">

@@ -6,10 +6,10 @@ export async  function preparePostData(post, provider, timestamp, relativeTimeCa
     let authorAvatarUrl = null
     if (authorEnsName) authorAvatarUrl = await provider.getAvatar(authorEnsName) 
     let isSponsored = false
-    let postRelativetime = relativeTimeCallback(timestamp)
+    let postRelativeTime = relativeTimeCallback(timestamp)
     let content = post.text
     
-    return { authorAddress, authorEnsName, authorAvatarUrl, isSponsored, postRelativetime, content }
+    return { authorAddress, authorEnsName, authorAvatarUrl, isSponsored, postRelativeTime, content }
 }
 
 export function getTimeSince(timestamp) {

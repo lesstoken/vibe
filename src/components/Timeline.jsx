@@ -5,6 +5,9 @@ import { ropstenABI, rinkebyABI } from '../utils/abis.js'
 import blueLogo from '../assets/images/logo-blue.svg'
 import PostCard from './PostCard';
 import { getTimeSince, preparePostData } from '../utils/utils';
+import searchIcon from '../assets/images/search-icon.svg'
+import avatar from '../assets/images/avatar.svg'
+
 
 function Timeline() {
     const { library, chainId } = useWeb3React();
@@ -22,7 +25,7 @@ function Timeline() {
                 let postDateTimestamp = post.timestamp.toNumber()
                 return await preparePostData(post, provider, postDateTimestamp, getTimeSince)
             }))
-            return preparedPosts
+            return preparedPosts.reverse()
         } catch(err) {
             console.log(err)
         }
@@ -58,8 +61,20 @@ function Timeline() {
                     :
                     <main className="main-wrapper">
                         <div className="main-inner-wrapper">
-                            <div className="placeholder-search" style={{border: '2px solid black', height: '200px'}}></div>
-                            {posts.length && posts.map(post => <PostCard post={post} />)}
+                            <div className="search">
+                                <input type="text" className="search-input" placeholder="Search..." />
+                                <img src={searchIcon} alt="search-icon" className="search-icon" />
+                            </div>
+                            <h1 className="main-heading">Update your Vibe</h1>
+                            <div className="your-vibe">
+                                <div className="your-vibe-input-wrapper">
+                                    <img src={avatar} alt="user-avatar" className="your-vibe-user-avatar" />
+                                    <input type="text" placeholder="How's your Vibe today?" className="your-vibe-input" />
+                                </div>
+                                <button className="post-btn btn btn-blue">POST</button>
+                            </div>
+                            <h1 className="main-heading">Feed</h1>
+                            {posts?.length && posts.map(post => <PostCard post={post} />)}
                         </div>
                     </main>
                 }

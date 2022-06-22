@@ -271,3 +271,185 @@
   margin: 0 10%;
   text-align: center;
 }
+
+.main-wrapper {
+  align-items: center;
+  background: rgba(255,255,255,0.3);
+  border-radius: 35px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  margin: 0 13px;
+  /* padding-bottom: 16px; */
+  z-index: 2;
+}
+
+.main-inner-wrapper {
+  align-items: center;
+  background: linear-gradient(90deg, rgba(255,255,255,0.3) 5%, rgba(255,255,255,0.6) 60%, rgba(195, 173, 246, 0.2) 95%);
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  height: 95%;
+  padding-bottom: 32px;
+  width: 96%;
+}
+
+.search {
+  background: linear-gradient(90deg, rgba(255,255,255,0.4) 5%, rgba(255,255,255,0.2) 60%, rgba(195, 173, 246, 0.1) 85%, rgba(195, 173, 246, 0.3) 95%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 19px;
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  margin-bottom: 59px;
+  margin-top: 18px;
+  width: 96%;
+}
+
+.search-input, .your-vibe-input {
+  background-color: transparent;
+  border: unset;
+  flex: 1;
+  padding: 21px 19px;
+  font-family: Roboto400;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.search-icon {
+  margin-right: 25px;
+}
+.search-icon:hover {
+  cursor: pointer;
+}
+
+.search-input:focus, .your-vibe-input:focus {
+  outline: none;
+}
+
+.main-heading {
+  font-family: Roboto500;
+  font-size: 20px;
+  line-height: 120%;
+  margin-bottom: 23px;
+  width: 96%;
+}
+
+.your-vibe {
+  background: linear-gradient(90deg, rgba(255,255,255,0.4) 5%, rgba(255,255,255,0.2) 60%, rgba(195, 173, 246, 0.1) 85%, rgba(195, 173, 246, 0.3) 95%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 19px;
+  display: flex;
+  height: 105px;
+  justify-content: space-between;
+  margin-bottom: 59px;
+  width: 96%;
+}
+
+.your-vibe-input-wrapper {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  height: 32px;
+  margin: 16px;
+}
+
+.your-vibe-user-avatar {
+  margin-right: 7px;
+  width: 32px;
+}
+
+.your-vibe-input {
+  padding: unset;
+}
+
+.post-btn {
+  margin: 46px 6px 10px 0;
+  width: 153px;
+}
+
+.card {
+  background: linear-gradient(90deg, rgba(255,255,255,0.4) 5%, rgba(255,255,255,0.2) 60%, rgba(195, 173, 246, 0.1) 85%, rgba(195, 173, 246, 0.3) 95%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  padding: 18px 16px;
+  width: 91%;
+}
+
+.card-top {
+  display: flex;
+}
+
+.avatar-wrapper {
+  height: 65px;
+  margin-right: 15px;
+  width:65px;
+}
+
+.card-center {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 7px;
+  max-width: 82%;
+}
+
+.card-top-center {
+  margin-bottom: 12px;
+}
+
+.card-owner, .card-relative-time, .interpunct {
+  font-family: Roboto700;
+  font-size: 15px;
+  line-height: 17.6px;
+}
+
+.card-owner {
+  margin-right: 4px;
+}
+
+.card-relative-time {
+  margin-left: 4px;
+}
+
+.card-content {
+  font-family: Roboto500;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.more:hover {
+  cursor: pointer;
+}
+
+.card-bottom {
+  display: flex;
+  margin-left: 81px;
+  margin-top: 10px;
+}
+
+.eth, .second {
+  display: flex;
+}
+
+.eth {
+  margin-right: 74px;
+}
+
+.eth > img, .second >img {
+  margin-right: 10px;
+}
+
+.amount, .amount-red {
+  font-family: Roboto500;
+  font-size: 13px;
+  line-height: 15px;
+  color: #5B7083;
+}
+
+.amount-red {
+  color: #C73333;
+
+}

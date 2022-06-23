@@ -167,6 +167,10 @@
   width: 22%;
 }
 
+.logout {
+  height: 210px;
+}
+
 .timeline-left-inner {
   background: linear-gradient(90deg, rgba(255,255,255,0.4) 10%, rgba(248, 206, 236, 0.4) 87%);
   border-radius: 25px;
@@ -180,14 +184,21 @@
 }
 
 .timeline-right-inner {
+  align-items: center;
   background: linear-gradient(90deg, rgba(255,255,255,0.4) 10%, rgba(195, 173, 246, 0.4) 87%);
   border-radius: 25px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   height: 80%;
   max-width: 291px;
   padding: 0 14px 0 14px;
   width: 80%;
+}
+
+.logout-inner {
+  height: 87%;
+  justify-content: flex-start;
 }
 
 .logo-blue {
@@ -207,6 +218,7 @@
 }
 
 .btn-big {
+  height: 49px;
   max-width: 263px;
   width: 100%;
 }
@@ -229,6 +241,11 @@
 
 .btn:active {
   opacity: 0.5;
+}
+
+.logout-btn, .user-btn {
+  margin: unset;
+  margin-top: 30px;
 }
 
 .network-wrapper {

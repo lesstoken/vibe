@@ -13,8 +13,8 @@ import { v4 as uuidv4 } from 'uuid'
 function Timeline() {
     const navigate = useNavigate()
     const { loggedInWallet, setLoggedInWallet } = useWalletContext()
-    console.log(loggedInWallet)
     const [isNetworkUnsupported, setIsNetworkUnsupported] = useState(true)
+    const [isLogoutVisible, setIsLogoutVisible] = useState(false)
     const [posts, setPosts] = useState([])
     const placeholder = loggedInWallet.ensName ? `How's your Vibe today, ${loggedInWallet.ensName}?` : "How's your Vibe today?"
     const abi = loggedInWallet.chainId === 3 ? ropstenABI : rinkebyABI
@@ -50,16 +50,14 @@ function Timeline() {
     }, [ isNetworkUnsupported, fetchPosts])
 
 
-    function handleLoginButton() {
-        if (loggedInWallet.active) {
-            loggedInWallet.deactivate()
-            setLoggedInWallet({})
-        }
+    function handleLogout() {
+        loggedInWallet.deactivate()
+        setLoggedInWallet({})
         navigate('/login')
     }
 
     return (
-        <div className="timeline-wrapper">
+        <div className="timeline-wrapper" onClick={() => {if (isLogoutVisible)setIsLogoutVisible(false)}}>
             <div className="timeline-inner-wrapper">
                 <aside className="timeline-left">
                     <div className="timeline-left-inner">
@@ -96,14 +94,15 @@ function Timeline() {
                         </div>
                     </main>
                 }
-                <aside className="timeline-right">
-                    <div className="timeline-right-inner">
+                <aside className={loggedInWallet.active && !isLogoutVisible ? 'timeline-right' : 'timeline-right logout'}>
+                    <div className={loggedInWallet.active && !isLogoutVisible ? 'timeline-right-inner' : 'timeline-right-inner logout-inner'}>
                         <button 
-                        className="btn btn-blue btn-big"
-                        onClick={handleLoginButton}
+                            className={"btn btn-big " + (loggedInWallet.active && !isLogoutVisible ? 'btn-white' : "btn-blue user-btn")}
+                            onClick={() => loggedInWallet.active ? setIsLogoutVisible(prev => !prev) : navigate('/login')}
                         >
                             {loggedInWallet.active ? loggedInWallet.ensName ? loggedInWallet.ensName : loggedInWallet.shortAddress : 'Login'}
                         </button>
+                        {isLogoutVisible && <button className="logout-btn btn btn-blue btn-big" onClick={() => handleLogout()}>Logout</button>}
                     </div>
                 </aside>
             </div>

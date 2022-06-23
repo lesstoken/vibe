@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState} from 'react'
-import {useWeb3React} from '@web3-react/core'
 import { ethers, BigNumber } from 'ethers'
 import { ropstenABI, rinkebyABI } from '../utils/abis.js'
 import blueLogo from '../assets/images/logo-blue.svg'
@@ -7,16 +6,25 @@ import PostCard from './PostCard';
 import { getTimeSince, preparePostData } from '../utils/utils';
 import searchIcon from '../assets/images/search-icon.svg'
 import avatar from '../assets/images/avatar.svg'
-
+import {useWalletContext} from '../contexts/WalletContext.js'
+import {  useNavigate } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid'
 
 function Timeline() {
-    const { library, chainId } = useWeb3React();
+    const navigate = useNavigate()
+    const { loggedInWallet, setLoggedInWallet } = useWalletContext()
+    console.log(loggedInWallet)
     const [isNetworkUnsupported, setIsNetworkUnsupported] = useState(true)
     const [posts, setPosts] = useState([])
+    const placeholder = loggedInWallet.ensName ? `How's your Vibe today, ${loggedInWallet.ensName}?` : "How's your Vibe today?"
+    const abi = loggedInWallet.chainId === 3 ? ropstenABI : rinkebyABI
+    const contractAddress = loggedInWallet.chainId === 3 ? '0xD208456A8aC709361Ca327B9329113aD3C0A9FD9' : '0x9120b19e921fAf41d315B528dE711f99cf530725'
+
+
     const fetchPosts = useCallback(async () => {
         try {
-            let provider = library || new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/ff087ba9578e4e0995028c853425a591')
-            const contract = new ethers.Contract('0x9120b19e921fAf41d315B528dE711f99cf530725', rinkebyABI, provider)
+            let provider = loggedInWallet.library || new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/ff087ba9578e4e0995028c853425a591')
+            const contract = new ethers.Contract(contractAddress, abi, provider)
             const latestPostID =  await contract.getLatestPostID()
             const num = latestPostID.sub(4)
             const posts = await contract.fetchPostsRanged(num, 5)
@@ -29,16 +37,26 @@ function Timeline() {
         } catch(err) {
             console.log(err)
         }
-    }, [library])
+    }, [loggedInWallet, contractAddress, abi ])
+
     
     useEffect(() => {
-        if (chainId === 3 || chainId === 4 || chainId === undefined) setIsNetworkUnsupported(false)
-    }, [chainId])
+        if (loggedInWallet.chainId === 3 || loggedInWallet.chainId === 4 || loggedInWallet.chainId === undefined) setIsNetworkUnsupported(false)
+    }, [loggedInWallet])
 
     useEffect(() => {
         if (isNetworkUnsupported) return
         fetchPosts().then(res => setPosts(res))
     }, [ isNetworkUnsupported, fetchPosts])
+
+
+    function handleLoginButton() {
+        if (loggedInWallet.active) {
+            loggedInWallet.deactivate()
+            setLoggedInWallet({})
+        }
+        navigate('/login')
+    }
 
     return (
         <div className="timeline-wrapper">
@@ -69,18 +87,23 @@ function Timeline() {
                             <div className="your-vibe">
                                 <div className="your-vibe-input-wrapper">
                                     <img src={avatar} alt="user-avatar" className="your-vibe-user-avatar" />
-                                    <input type="text" placeholder="How's your Vibe today?" className="your-vibe-input" />
+                                    <input type="text" placeholder={placeholder} className="your-vibe-input" />
                                 </div>
                                 <button className="post-btn btn btn-blue">POST</button>
                             </div>
                             <h1 className="main-heading">Feed</h1>
-                            {posts?.length && posts.map(post => <PostCard post={post} />)}
+                            {posts?.length && posts.map(post => <PostCard key={uuidv4()} post={post} />)}
                         </div>
                     </main>
                 }
                 <aside className="timeline-right">
                     <div className="timeline-right-inner">
-                        <button className="btn btn-blue btn-big">3327.eth</button>
+                        <button 
+                        className="btn btn-blue btn-big"
+                        onClick={handleLoginButton}
+                        >
+                            {loggedInWallet.active ? loggedInWallet.ensName ? loggedInWallet.ensName : loggedInWallet.shortAddress : 'Login'}
+                        </button>
                     </div>
                 </aside>
             </div>

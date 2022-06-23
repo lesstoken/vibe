@@ -7,17 +7,28 @@ import { walletconnectConnector, metamaskConnector } from '../connectors'
 import { useWeb3React } from '@web3-react/core'
 import { useEffect } from 'react'
 import { useNavigate} from 'react-router-dom'
+import {useWalletContext} from '../contexts/WalletContext'
+import {useCallback} from 'react'
 
 function Login() {
     const navigate = useNavigate()
-    const wallet = useWeb3React();
-    // connector, library, chainId, account, activate, deactivate, active, error
-    const { activate, active, account } = wallet;
-    console.log('account: ' + account )
+    const { loggedInWallet, setLoggedInWallet } = useWalletContext()
+    const web3ReactWallet = useWeb3React()
+
+
+    const setWallet = useCallback(async () => {
+        let ensName = null
+        if (web3ReactWallet.chainId !== 42) ensName = await web3ReactWallet.library.lookupAddress(web3ReactWallet.account)
+        let shortAddress = web3ReactWallet.account.slice(0, 6) + '...' + web3ReactWallet.account.slice(-4)
+        setLoggedInWallet({...web3ReactWallet, shortAddress, ensName})
+        navigate('/')
+    }, [web3ReactWallet, setLoggedInWallet, navigate])
+
 
     useEffect(() => {
-        if (active) navigate('/')
-    }, [active, navigate])
+        if (loggedInWallet.active) navigate('/')
+        else if (web3ReactWallet.active) setWallet()
+    }, [loggedInWallet, navigate, web3ReactWallet, setWallet])
 
     return (
         <div className="login-wrapper">
@@ -31,11 +42,11 @@ function Login() {
                     <h1 className="login-h1">Connect your wallet</h1>
                     <p className="login-p">Need help connecting a wallet? <a href="/faq">Read our FAQ</a></p>
                     <div className="login-btns-wrapper">
-                        <button className="login-btn" onClick={() => activate(metamaskConnector)}>
+                        <button className="login-btn" onClick={() => web3ReactWallet.activate(metamaskConnector)}>
                             <img src={metamask} alt="metamask-icon" className="login-btn-icon"/>
                             <span className="login-btn-text">MetaMask</span>
                         </button>
-                        <button className="login-btn" onClick={() => activate(walletconnectConnector)}>
+                        <button className="login-btn" onClick={() => web3ReactWallet.activate(walletconnectConnector)}>
                             <img src={walletconnect} alt="walletconnect-icon" className="login-btn-icon"/>
                             <span className="login-btn-text">WalletConnect</span>
                         </button>

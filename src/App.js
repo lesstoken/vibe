@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import Timeline from "./components/Timeline";
 import { Web3ReactProvider } from '@web3-react/core'
 import { ethers } from 'ethers'
-
+import { WalletProvider } from './contexts/WalletContext'
 
 function App() {
 	function getLibrary(provider, connector) {
@@ -14,12 +14,14 @@ function App() {
 
 	return (
 		<Web3ReactProvider getLibrary={getLibrary}>
-			<Router basename="/">
-				<Routes>
-					<Route path="/login" element={<Login />} />
-					<Route path="/" element={<Timeline />} />
-				</Routes>
-			</Router>
+			<WalletProvider>
+				<Router basename="/">
+					<Routes>
+						<Route path="/login" element={<Login />} />
+						<Route path="/" element={<Timeline />} />
+					</Routes>
+				</Router>
+			</WalletProvider>
 		</Web3ReactProvider>
 	)
 }

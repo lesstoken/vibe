@@ -1,5 +1,3 @@
-// import { BigNumber } from "ethers"
-
 export async  function preparePostData(post, provider, timestamp, relativeTimeCallback) {
     let authorAddress = post.owner
     let authorEnsName = await provider.lookupAddress(authorAddress)

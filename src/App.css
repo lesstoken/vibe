@@ -1,3 +1,28 @@
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.login-loading {
+  margin: 20px 0 0 20px;
+}
+
+.loading {
+  margin-bottom: 16px;
+}
+
+.loading-spinner {
+  animation: spinner 1.2s linear infinite;
+  border: 8px solid rgba(195, 173, 246, 0.8);
+  border-radius: 30%;
+  height: 30px;
+  width: 30px;
+}
+
 .login-wrapper {
   display: flex;
 }
@@ -106,9 +131,7 @@
 .timeline-wrapper {
   background-color: #E5E5E5;
   height: 100%;
-  height: 200vh;
-  overflow: hidden;
-  padding: 15px;
+  overflow-x: hidden;
   position: relative;
   width: 100%;
 }
@@ -116,7 +139,8 @@
 .timeline-inner-wrapper {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  padding: 15px;
+  width: calc(100% - 30px);
 }
 
 .timeline-gradient-left {
@@ -297,7 +321,7 @@
   flex: 1;
   justify-content: center;
   margin: 0 13px;
-  /* padding-bottom: 16px; */
+  padding: 16px;
   z-index: 2;
 }
 
@@ -307,9 +331,9 @@
   border-radius: 25px;
   display: flex;
   flex-direction: column;
-  height: 95%;
-  padding-bottom: 32px;
-  width: 96%;
+  height: calc(100% - 32px);
+  padding: 16px;
+  width: calc(100% - 32px);
 }
 
 .search {
@@ -320,8 +344,7 @@
   height: 60px;
   justify-content: space-between;
   margin-bottom: 59px;
-  margin-top: 18px;
-  width: 96%;
+  width: 100%;
 }
 
 .search-input, .your-vibe-input {
@@ -350,7 +373,7 @@
   font-size: 20px;
   line-height: 120%;
   margin-bottom: 23px;
-  width: 96%;
+  width: 100%;
 }
 
 .your-vibe {
@@ -361,7 +384,7 @@
   height: 105px;
   justify-content: space-between;
   margin-bottom: 59px;
-  width: 96%;
+  width: 100%;
 }
 
 .your-vibe-input-wrapper {
@@ -392,7 +415,7 @@
   border-radius: 16px;
   margin-bottom: 16px;
   padding: 18px 16px;
-  width: 91%;
+  width: calc(100% - 32px);
 }
 
 .card-top {

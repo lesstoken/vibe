@@ -5,7 +5,7 @@ import coinsRed from '../assets/images/coins-red.svg'
 import insert from '../assets/images/insert.svg'
 import LinkPreview from './LinkPreview'
 
-function PostCard({ post }) {
+function PostCard({ post, setPopup }) {
     let {content, link, previewHost, previewImage, previewDesc} = post
     if (link) {
         const urlRegex = /(http|https|ftp|ftps):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,4}(\/\S*)?/
@@ -35,7 +35,7 @@ function PostCard({ post }) {
                 </div>
             </div>
             <div className="card-bottom">
-                <div className="eth">
+                <div className="eth" onClick={() => setPopup('donate')}>
                     <img src={post.isSponsored ? coinsRed : coins} alt="ethers-icon" className="card-bottom-icon" />
                     <span className={post.isSponsored ? 'amount-red' : 'amount'}>6.2K</span>
                 </div>

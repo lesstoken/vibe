@@ -3,6 +3,7 @@ import { ethers, BigNumber } from 'ethers'
 import { ropstenABI, rinkebyABI } from '../utils/abis.js'
 import blueLogo from '../assets/images/logo-blue.svg'
 import PostCard from './PostCard';
+import Popup from './Popup'
 import { getTimeSince, preparePostData } from '../utils/utils';
 import searchIcon from '../assets/images/search-icon.svg'
 import avatar from '../assets/images/avatar.svg'
@@ -21,6 +22,7 @@ function Timeline() {
     const [hasMorePosts, setHasMorePosts] = useState(true)
     const [posts, setPosts] = useState([])
     const [popup, setPopup] = useState(null)
+    const [error, setError] = useState(false)
 
     const placeholder = loggedInWallet.ensName ? `How's your Vibe today, ${loggedInWallet.ensName}?` : "How's your Vibe today?"
     const abi = loggedInWallet.chainId === 3 ? ropstenABI : rinkebyABI
@@ -55,7 +57,9 @@ function Timeline() {
 
         } catch(err) {
             console.log(err)
-            // setError(true)
+            setError(true)
+            setHasMorePosts(false)
+            setIsFetching(false)
         }
     }, [abi, contractAddress, loggedInWallet.library, page])
     
@@ -79,29 +83,7 @@ function Timeline() {
 
     return (
         <>
-            {   popup === 'write' ?
-                <div className="popup-outer" onClick={() => setPopup(null)}>
-                    <div className="popup" onClick={e => e.stopPropagation()}>
-                        <div className="popup-inner">
-                            <div className="popup-input-btn">
-                                <div className="your-vibe-input-wrapper">
-                                    <img src={avatar} alt="user-avatar" className="your-vibe-user-avatar" />
-                                    <input type="text" placeholder={placeholder} className="your-vibe-input" />
-                                </div>
-                            </div>
-                            <button className="post-btn btn btn-blue">POST</button>
-                        </div>
-                    </div>
-                </div>
-                :
-                popup === 'donate' ?
-                null
-                :
-                popup === 'image' ?
-                null
-                :
-                null
-            }
+            { popup && <Popup type={popup} setPopup={setPopup} /> }
             <div className="timeline-wrapper" onClick={() => {if (isLogoutVisible)setIsLogoutVisible(false)}}>
                 <div className="timeline-inner-wrapper">
 
@@ -130,21 +112,23 @@ function Timeline() {
                                 </div>
                                 <h1 className="main-heading">Update your Vibe</h1>
                                 <div className="your-vibe">
-                                    <div className="your-vibe-input-wrapper">
-                                        <img src={avatar} alt="user-avatar" className="your-vibe-user-avatar" />
-                                        <input type="text" placeholder={placeholder} className="your-vibe-input" />
-                                    </div>
+                                    <img src={avatar} alt="user-avatar" className="popup-avatar" />
+                                    <textarea placeholder={placeholder} className="popup-input"></textarea>
                                     <button className="post-btn btn btn-blue">POST</button>
                                 </div>
                                 { posts?.length ? <h1 className="main-heading">Feed</h1> : null }
-                                { posts?.length ? posts.map(post => <PostCard key={uuidv4()} post={post} />) : null }
+                                { posts?.length ? posts.map(post => <PostCard key={uuidv4()} post={post} setPopup={setPopup} />) : null }
                                 {
                                     isFetching && 
                                     <div className="loading">
                                         <div className="loading-spinner"></div>
                                     </div>
                                 }
-                                <div ref={observerElementRef} className="amount">{!hasMorePosts && 'The End'}</div>
+                                <div ref={observerElementRef} className="amount">
+                                    <span>
+                                        {error ? 'Error' : !hasMorePosts ? 'The End' : ''}    
+                                    </span>
+                                </div>
                             </div>
                         </main>
                     }

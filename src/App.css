@@ -108,7 +108,7 @@
   width: 338px;
 }
 
-.login-btn:hover {
+.login-btn:hover, .btn:hover, .search-icon:hover, .more:hover, .eth:hover {
   cursor: pointer;
 }
 
@@ -259,10 +259,6 @@
   font-family: Roboto500;
 }
 
-.btn:hover {
-  cursor: pointer;
-}
-
 .btn:active {
   opacity: 0.5;
 }
@@ -347,7 +343,7 @@
   width: 100%;
 }
 
-.search-input, .your-vibe-input {
+.search-input, .popup-input {
   background-color: transparent;
   border: unset;
   flex: 1;
@@ -360,11 +356,8 @@
 .search-icon {
   margin-right: 25px;
 }
-.search-icon:hover {
-  cursor: pointer;
-}
 
-.search-input:focus, .your-vibe-input:focus {
+.search-input:focus, .popup-input:focus {
   outline: none;
 }
 
@@ -381,31 +374,14 @@
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 19px;
   display: flex;
-  height: 105px;
-  justify-content: space-between;
+  height: 73px;
   margin-bottom: 59px;
-  width: 100%;
-}
-
-.your-vibe-input-wrapper {
-  align-items: center;
-  display: flex;
-  flex: 1;
-  height: 32px;
-  margin: 16px;
-}
-
-.your-vibe-user-avatar {
-  margin-right: 7px;
-  width: 32px;
-}
-
-.your-vibe-input {
-  padding: unset;
+  padding: 16px;
+  width: calc(100% - 32px);
 }
 
 .post-btn {
-  margin: 46px 6px 10px 0;
+  margin: 30px 6px 10px 0;
   width: 153px;
 }
 
@@ -458,10 +434,6 @@
   font-family: Roboto500;
   font-size: 16px;
   line-height: 16px;
-}
-
-.more:hover {
-  cursor: pointer;
 }
 
 .card-bottom {
@@ -527,7 +499,7 @@
 /* POPUPS */
 .popup-outer {
   align-items: center;
-  background: rgba(0, 0 ,0, 0.4);
+  background: rgba(0, 0 ,0, 0.7);
   bottom: 0;
   display: flex;
   justify-content: center;
@@ -552,18 +524,50 @@
 
 .popup-inner {
   align-items: center;
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 25px;
   display: flex;
-  height: 92%;
+  height: 94%;
   justify-content: center;
-  width: 96%;
+  width: 97%;
 }
 
 .popup-input-btn {
+  background: rgba(255, 255, 255, 1);
+  border-radius: 19px;
   display: flex;
-  height: 105px;
+  height: 73px;
   justify-content: space-between;
-  margin-bottom: 59px;
-  width: 60%;
+  padding: 16px;
+  width: 70%;
+}
+
+.popup-input-wrapper {
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.popup-avatar {
+  align-self: flex-start;
+  width: 32px;
+}
+
+.popup-input {
+  align-self: flex-start;
+  padding: 7px;
+  resize: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.popup-textarea {
+  height: 100%;
 }

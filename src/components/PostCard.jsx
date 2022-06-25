@@ -3,8 +3,14 @@ import more from '../assets/images/3-dots.svg'
 import coins from '../assets/images/coins.svg'
 import coinsRed from '../assets/images/coins-red.svg'
 import insert from '../assets/images/insert.svg'
+import LinkPreview from './LinkPreview'
 
 function PostCard({ post }) {
+    let {content, link, previewHost, previewImage, previewDesc} = post
+    if (link) {
+        const urlRegex = /(http|https|ftp|ftps):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,4}(\/\S*)?/
+        content = content.replace(urlRegex, '')
+    }
     return(
         <div className="card">
             <div className="card-top">
@@ -17,7 +23,12 @@ function PostCard({ post }) {
                         <span className="interpunct">⋅</span>
                         <span className="card-relative-time">{post.postRelativeTime}</span>
                     </div>
-                    <p className="card-content">{post.content}</p>
+                    <p className="card-content">{content}</p>
+                    {post.link ?
+                        <LinkPreview link={link} img={previewImage} host={previewHost} desc={previewDesc} />
+                        :
+                        null
+                    }
                 </div>
                 <div className="more-wrapper">
                     <img src={more} alt="more-options-icon" className="more" />

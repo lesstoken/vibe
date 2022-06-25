@@ -18,7 +18,7 @@ function App() {
 				<Router basename="/">
 					<Routes>
 						<Route path="/login" element={<Login />} />
-						<Route path="/" element={<Timeline />} />
+						<Route path="/timeline" element={<Timeline />} />
 					</Routes>
 				</Router>
 			</WalletProvider>

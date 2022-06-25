@@ -493,3 +493,77 @@
   color: #C73333;
 
 }
+
+.link-preview {
+  margin-bottom: 20px;
+}
+
+.link-preview-anchor {
+  text-decoration: none;
+}
+
+.link-preview-img {
+  display: block;
+  margin-top: 10px;
+  width: 50%;
+}
+
+.link-preview-host {
+  font-family: Roboto400;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.link-preview-desc {
+  font-family: Roboto500;
+}
+
+.link-preview-host:hover, .link-preview-desc:hover {
+  text-decoration: underline;
+}
+
+
+
+/* POPUPS */
+.popup-outer {
+  align-items: center;
+  background: rgba(0, 0 ,0, 0.4);
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.popup {
+  align-items: center;
+  background: rgba(255,255,255,0.3);
+  border-radius: 35px;
+  display: flex;
+  height: 370px;
+  justify-content: center;
+  max-width: 941px;
+  width: 90%;
+}
+
+.popup-inner {
+  align-items: center;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 25px;
+  display: flex;
+  height: 92%;
+  justify-content: center;
+  width: 96%;
+}
+
+.popup-input-btn {
+  display: flex;
+  height: 105px;
+  justify-content: space-between;
+  margin-bottom: 59px;
+  width: 60%;
+}

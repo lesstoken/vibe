@@ -4,7 +4,7 @@ import { ropstenABI, rinkebyABI } from '../utils/abis.js'
 import blueLogo from '../assets/images/logo-blue.svg'
 import PostCard from './PostCard';
 import Popup from './Popup'
-import { getTimeSince, preparePostData } from '../utils/utils';
+import { getTimeSince, preparePostsData } from '../utils/utils';
 import searchIcon from '../assets/images/search-icon.svg'
 import avatar from '../assets/images/avatar.svg'
 import { useWalletContext } from '../contexts/WalletContext.js'
@@ -15,21 +15,25 @@ import { useRef } from 'react';
 function Timeline() {
     const navigate = useNavigate()
     const { loggedInWallet, setLoggedInWallet } = useWalletContext()
+    const [provider, setProvider] = useState(null)
+    const [contract, setContract] = useState(null)
+    const [signer, setSigner] = useState(null)
+
     const [isNetworkUnsupported, setIsNetworkUnsupported] = useState(true)
     const [isLogoutVisible, setIsLogoutVisible] = useState(false)
     const [isFetching, setIsFetching] = useState(true)
-    const [page, setPage] = useState(1)
     const [hasMorePosts, setHasMorePosts] = useState(true)
+    
     const [posts, setPosts] = useState([])
+    const [page, setPage] = useState(1)
     const [popup, setPopup] = useState(null)
     const [error, setError] = useState(false)
 
     const placeholder = loggedInWallet.ensName ? `How's your Vibe today, ${loggedInWallet.ensName}?` : "How's your Vibe today?"
-    const abi = loggedInWallet.chainId === 3 ? ropstenABI : rinkebyABI
-    const contractAddress = loggedInWallet.chainId === 3 ? '0xD208456A8aC709361Ca327B9329113aD3C0A9FD9' : '0x9120b19e921fAf41d315B528dE711f99cf530725'
     const batchAmount = 5
 
     const observer = useRef()
+
 
 
     const observerElementRef = useCallback(element => {
@@ -41,29 +45,40 @@ function Timeline() {
     }, [hasMorePosts, isNetworkUnsupported, isFetching, setPage])
 
     const fetchPosts = useCallback(async() => {
+        if (!provider) return
         try {
-            setIsFetching(true)
-            const provider = loggedInWallet.library || new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/ff087ba9578e4e0995028c853425a591') // useState()
-            const contract = new ethers.Contract(contractAddress, abi, provider)
-            const latestPostID =  await contract.getLatestPostID()
-            let startID = latestPostID.sub(batchAmount * page - 1)
-                if (startID.lt(0)) startID = ethers.BigNumber.from(0)
-
-            let posts =  await contract.fetchPostsRanged(startID, batchAmount)
-            let preparedPosts = await preparePostData(posts, provider, getTimeSince)
-            setPosts(prev => [...prev, ...preparedPosts])
-            setIsFetching(false)
-            if (startID.isZero()) setHasMorePosts(false)
-
+                setIsFetching(true)
+                const latestPostID =  await contract.getLatestPostID()
+                let startID = latestPostID.sub(batchAmount * page - 1)
+                    if (startID.lt(0)) startID = ethers.BigNumber.from(0)
+    
+                let posts =  await contract.fetchPostsRanged(startID, batchAmount)
+                let preparedPosts = await preparePostsData(posts, provider, getTimeSince)
+                setPosts(prev => [...prev, ...preparedPosts])
+                setIsFetching(false)
+                if (startID.isZero()) setHasMorePosts(false)
         } catch(err) {
             console.log(err)
             setError(true)
             setHasMorePosts(false)
             setIsFetching(false)
         }
-    }, [abi, contractAddress, loggedInWallet.library, page])
+    }, [provider, contract, page])
     
     
+    useEffect(() => {
+        async function initialSetup() {
+            const contractAddress = loggedInWallet.chainId === 3 ? '0xD208456A8aC709361Ca327B9329113aD3C0A9FD9' : '0x9120b19e921fAf41d315B528dE711f99cf530725'
+            const abi = loggedInWallet.chainId === 3 ? ropstenABI : rinkebyABI
+            const rpcUrl = loggedInWallet.chainId === 3 ? 'https://ropsten.infura.io/v3/ff087ba9578e4e0995028c853425a591' : 'https://rinkeby.infura.io/v3/ff087ba9578e4e0995028c853425a591'
+            let newProvider = new ethers.providers.JsonRpcProvider(rpcUrl)
+            setProvider(newProvider)
+            let newContract = new ethers.Contract(contractAddress, abi, newProvider)
+            setContract( newContract )
+        }
+        initialSetup()
+    }, [loggedInWallet])
+
     useEffect(() => {
         if (loggedInWallet.chainId === 3 || 
             loggedInWallet.chainId === 4 ||
@@ -72,7 +87,7 @@ function Timeline() {
 
     useEffect(() => {
         if (!isNetworkUnsupported) fetchPosts()
-    }, [isNetworkUnsupported, fetchPosts])
+    }, [isNetworkUnsupported, fetchPosts, loggedInWallet])
 
 
     function handleLogout() {
@@ -81,16 +96,21 @@ function Timeline() {
         navigate('/login')
     }
 
+    function handleWriteAPost() {
+        if (!loggedInWallet.account) navigate('/login')
+        else setPopup('write')
+    }
+
     return (
         <>
-            { popup && <Popup type={popup} setPopup={setPopup} /> }
+            { popup && <Popup type={popup} setPopup={setPopup} contract={contract} setPosts={setPosts}/> }
             <div className="timeline-wrapper" onClick={() => {if (isLogoutVisible)setIsLogoutVisible(false)}}>
                 <div className="timeline-inner-wrapper">
 
                     <aside className="timeline-left">
                         <div className="timeline-left-inner">
                             <img src={blueLogo} alt="logo-blue" className="logo-blue" />
-                            <button className="btn btn-blue btn-big" onClick={() => setPopup('write')}>Write A Post</button>
+                            <button className="btn btn-blue btn-big" onClick={handleWriteAPost}>Write A Post</button>
                         </div>
                     </aside>
 

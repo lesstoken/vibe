@@ -12,7 +12,10 @@ server.get('/', (req, res) => {
         res.send('No url')
     } else {
         try {
-            getLinkPreview(req.query.link).then((data) => res.json(data))
+            // getLinkPreview(req.query.link).then((data) => {
+            getLinkPreview('https://www.youtube.com/watch?v=EOAPMhaCtuw').then((data) => {
+                res.json(data)
+            })
         } catch(err) {
             console.log(err)
             res.status(500)

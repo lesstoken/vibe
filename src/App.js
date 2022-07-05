@@ -9,7 +9,9 @@ import { WalletProvider } from './contexts/WalletContext'
 
 function App() {
 	function getLibrary(provider, connector) {
-		return new ethers.providers.Web3Provider(provider)
+		const library = new ethers.providers.Web3Provider(provider)
+		library.pollingInterval = 8000
+		return library
 	}
 
 	return (
@@ -18,7 +20,7 @@ function App() {
 				<Router basename="/">
 					<Routes>
 						<Route path="/login" element={<Login />} />
-						<Route path="/timeline" element={<Timeline />} />
+						<Route path="/" element={<Timeline />} />
 					</Routes>
 				</Router>
 			</WalletProvider>

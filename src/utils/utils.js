@@ -1,6 +1,6 @@
 import {getUrlMetaData} from "./service"
 
-export async  function preparePostData(posts, provider, relativeTimeCallback) {
+export async  function preparePostsData(posts, provider, relativeTimeCallback) {
     let filteredPosts = posts.filter(post => post.owner !== '0x0000000000000000000000000000000000000000')
     let preparedPosts = await Promise.all( filteredPosts.map( async post => {
         //LINK PREVIEW
@@ -9,13 +9,22 @@ export async  function preparePostData(posts, provider, relativeTimeCallback) {
         let link = null
         let previewHost = null
         let previewImage = null
+        let previewVideo = null
         let previewDesc = null
         if (postUrl) {
             link = postUrl[0]
-            const postMeta = await getUrlMetaData(postUrl[0])
-            previewHost = new URL(link).hostname
-            previewImage = postMeta.data.images[0]
-            previewDesc = postMeta.data.description
+            let postMeta = null
+            try {
+                postMeta = await getUrlMetaData(postUrl[0])
+            } catch(err) {
+                console.log(err)
+            }
+            if (postMeta) {
+                previewHost = new URL(link).hostname
+                previewImage = postMeta.data.images[0]
+                previewVideo = postMeta.data.videos[0]
+                previewDesc = postMeta.data.description
+            }
         }
 
         //This will throw an error if the value is greater than or equal to Number.MAX_SAFE_INTEGER or less than or equal to Number.MIN_SAFE_INTEGER.
@@ -28,7 +37,7 @@ export async  function preparePostData(posts, provider, relativeTimeCallback) {
         let postRelativeTime = relativeTimeCallback(postDateTimestamp,convertNumToShortMonth)
         let content = post.text
 
-        return { authorAddress, authorEnsName, authorAvatarUrl, isSponsored, postRelativeTime, content, link, previewHost, previewImage, previewDesc }
+        return { authorAddress, authorEnsName, authorAvatarUrl, isSponsored, postRelativeTime, content, link, previewHost, previewImage, previewVideo, previewDesc }
     }))
     return preparedPosts.reverse()
 }

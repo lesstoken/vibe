@@ -4,12 +4,22 @@ import coins from '../assets/images/coins.svg'
 import coinsRed from '../assets/images/coins-red.svg'
 import insert from '../assets/images/insert.svg'
 import LinkPreview from './LinkPreview'
+import {useWalletContext} from '../contexts/WalletContext'
+import {useNavigate} from 'react-router-dom'
 
 function PostCard({ post, setPopup }) {
-    let {content, link, previewHost, previewImage, previewDesc} = post
+    const { loggedInWallet } = useWalletContext()
+    const navigate = useNavigate()
+
+    let {content, link, previewHost, previewImage, previewVideo, previewDesc} = post
     if (link) {
         const urlRegex = /(http|https|ftp|ftps):\/\/[a-zA-Z0-9\-.]+\.[a-zA-Z]{2,4}(\/\S*)?/
         content = content.replace(urlRegex, '')
+    }
+
+    function handleDonate() {
+        if (!loggedInWallet.account) navigate('/login')
+        else setPopup('donate')
     }
     return(
         <div className="card">
@@ -25,7 +35,7 @@ function PostCard({ post, setPopup }) {
                     </div>
                     <p className="card-content">{content}</p>
                     {post.link ?
-                        <LinkPreview link={link} img={previewImage} host={previewHost} desc={previewDesc} />
+                        <LinkPreview link={link} img={previewImage} video={previewVideo} host={previewHost} desc={previewDesc} />
                         :
                         null
                     }
@@ -35,7 +45,7 @@ function PostCard({ post, setPopup }) {
                 </div>
             </div>
             <div className="card-bottom">
-                <div className="eth" onClick={() => setPopup('donate')}>
+                <div className="eth" onClick={handleDonate}>
                     <img src={post.isSponsored ? coinsRed : coins} alt="ethers-icon" className="card-bottom-icon" />
                     <span className={post.isSponsored ? 'amount-red' : 'amount'}>6.2K</span>
                 </div>

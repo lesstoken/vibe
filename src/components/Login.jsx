@@ -14,13 +14,22 @@ function Login() {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
     const { loggedInWallet, setLoggedInWallet } = useWalletContext()
-    const web3ReactWallet = useWeb3React()
+    let web3ReactWallet = useWeb3React()
+
+    // useEffect(() => {
+    //     console.log(web3ReactWallet.library?.provider?.http)
+    //     // if (!web3ReactWallet.library?.provider?.http) {
+    //     //     window.location.reload()
+    //     // }
+    // }, [web3ReactWallet])
+
 
     const setWallet = useCallback(async () => {
         setIsLoading(true)
         let ensName = null
         if (web3ReactWallet.chainId !== 42) ensName = await web3ReactWallet.library.lookupAddress(web3ReactWallet.account)
         let shortAddress = web3ReactWallet.account.slice(0, 6) + '...' + web3ReactWallet.account.slice(-4)
+        console.log(web3ReactWallet)
         setLoggedInWallet({...web3ReactWallet, shortAddress, ensName})
         navigate('/')
     }, [web3ReactWallet, setLoggedInWallet, navigate])
@@ -53,7 +62,7 @@ function Login() {
                         </button>
                         <button 
                             className="login-btn" 
-                            onClick={() => web3ReactWallet.activate(walletconnectConnector)}
+                            onClick={() =>  web3ReactWallet.activate(walletconnectConnector)}
                             disabled={isLoading}
                         >
                             <img src={walletconnect} alt="walletconnect-icon" className="login-btn-icon"/>

@@ -527,6 +527,7 @@
   background: rgba(255, 255, 255, 0.8);
   border-radius: 25px;
   display: flex;
+  flex-direction: column;
   height: 94%;
   justify-content: center;
   width: 97%;
@@ -570,4 +571,10 @@ input[type=number] {
 
 .popup-textarea {
   height: 100%;
+}
+
+.popup-input-error {
+  color: red;
+  font-family: Roboto400;
+  margin-top: 10px;
 }
